@@ -25,7 +25,6 @@ function renderAirport(airportObj) {
     const nameH4 = document.createElement("h4")
     nameH4.className = "airport-name"
     nameH4.textContent = airportObj.name
-    debugger
     const airportImg = document.createElement("img")
     airportImg.className = "airport-image" 
     airportImg.dataset.id = airportObj.id
@@ -37,22 +36,21 @@ function renderAirport(airportObj) {
     airportLike.textContent = `${airportObj.likes} 🛫`
     airportLike.dataset.id = airportObj.id
 
-
     airportLi.append(nameH4, airportImg, airportLike)
     airportsUl.append(airportLi)
     
 }
 
 //***** Getting amenities ***/
-function getAmenities () {
-    fetch('http://localhost:3000/amenities')
-        .then(response => response.json())
-        .then(amenitiesArray => {
-            amenitiesArray.forEach(amenityObj => {
-                renderAmenity(amenityObj)
-            })
-        });
-}
+// function getAmenities () {
+//     fetch('http://localhost:3000/amenities')
+//         .then(response => response.json())
+//         .then(amenitiesArray => {
+//             amenitiesArray.forEach(amenityObj => {
+//                 renderAmenity(amenityObj)
+//             })
+//         });
+// }
 
 function renderAmenity (amenityObj) {
     const amenityLi = document.createElement("li")
@@ -60,10 +58,12 @@ function renderAmenity (amenityObj) {
     const amenityImg = document.createElement("img")
     amenityH4.className = "amenity-name"
     amenityH4.textContent = amenityObj.name
+    
     amenityImg.className = "amenity-image"
     amenityImg.dataset.id = amenityObj.id
     amenityImg.src = amenityObj.image
 
+    
     amenityLi.append(amenityH4, amenityImg)
     amenitiesUl.append(amenityLi)
 }
@@ -99,7 +99,7 @@ function renderRestaurant (restaurantObj) {
 getAirports() 
 getAmenities()
 getRestaurants()
-
+// getStores()
 
 
 //**********  Event Listener on Airports (click on image) ****/
@@ -107,7 +107,13 @@ getRestaurants()
 airportsUl.addEventListener("click", event => {
     if(event.target.className === "airport-image"){
         const id = event.target.dataset.id
+        console.log(event.target)
         getAirportById(id)
+
+        getAmenities(id)
+        // getRestaurants(id)
+        // getStores(id)
+        
     }
     if(event.target.className === "airport-likebtn"){
         const id = event.target.dataset.id
@@ -115,6 +121,22 @@ airportsUl.addEventListener("click", event => {
     }
 
 })
+
+function getAmenities(id){
+    fetch(`http://localhost:3000/amenities`)
+    .then(response => response.json())
+    .then(amenitiesArray => {
+        amenitiesUl.innerHTML = ""
+        amenitiesArray.forEach(amenity => {
+            // console.log(amenity.airport_id == id)
+            // amenitiesUl.innerHTML = ""
+            if(amenity.airport_id == id) {
+                renderAmenity(amenity)
+            }
+        })
+        
+    })
+}
 
 function updateLikes(id) {
     fetch(`http://localhost:3000/airports/${id}`, {
@@ -134,7 +156,7 @@ function getAirportById(id){
     fetch(`http://localhost:3000/airports/${id}`)
     .then(response => response.json())
     .then(airportObj => {
-        //   renderAirportInfo(airportObj)
+        // once we click the airport 
         
     })
 }
