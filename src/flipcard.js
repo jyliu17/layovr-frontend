@@ -1,0 +1,6 @@
+// const airportsUl = document.querySelector('#airports-ul')
+// const airportsDetailOuterDiv = document.querySelector('#airport-detail-outer-div')
+// const airportsDiv = document.querySelector('#airports-div')
+// const amenitiesUl = document.querySelector('#amenities-ul')
+// const restaurantsUl = document.querySelector('#restaurants-ul')
+// const storesUl = document.querySelector('#stores-ul')

@@ -1,17 +1,19 @@
 // STABLE ELEMENTS
 
 const airportsUl = document.querySelector('#airports-ul')
-// const airportsInfoOuterDiv = document.querySelector('#airports-info-outer-div')
+const airportsDetailOuterDiv = document.querySelector('#airport-detail-outer-div')
 const airportsDiv = document.querySelector('#airports-div')
 const amenitiesUl = document.querySelector('#amenities-ul')
 const restaurantsUl = document.querySelector('#restaurants-ul')
 const storesUl = document.querySelector('#stores-ul')
+const formDiv = document.querySelector("#form-div")
+const commentsUl = document.querySelector("#comments-ul")
 
 // FUNCTIONS
 
-getAirports() 
+getAirports()
 //***** Getting all airports ***/
-function getAirports () {
+function getAirports() {
     fetch('http://localhost:3000/airports')
         .then(response => response.json())
         .then(airportArray => {
@@ -21,7 +23,7 @@ function getAirports () {
         });
 }
 
-//****** Render Airport Div, Amenities, Restaurants, Stores *****/
+//****** Render Airport Div, Amenities, Restaurants, Stores, Comment*****/
 
 function renderAirport(airportObj) {
 
@@ -30,17 +32,19 @@ function renderAirport(airportObj) {
     airportImgDiv.className = "circular--landscape"
     const nameH4 = document.createElement("h4")
     nameH4.className = "airport-name"
-    nameH4.textContent = airportObj.name
+    nameH4.textContent = airportObj.code
     const airportImg = document.createElement("img")
-    airportImg.className = "airport-image" 
+    airportImg.className = "airport-image"
     airportImg.dataset.id = airportObj.id
-    airportImg.src = airportObj.image 
-    airportImg.alt = airportObj.name
+    airportImg.src = airportObj.image
+    airportImg.alt = airportObj.code
 
     const airportLike = document.createElement("button")
+    // const likeSpan = document.createElement('span')
     airportLike.className = "airport-likebtn"
     airportLike.textContent = `${airportObj.likes} 🛫`
     airportLike.dataset.id = airportObj.id
+    // airportLike.append(likeSpan)
 
     airportImgDiv.append(airportImg)
     airportLi.append(nameH4, airportImgDiv, airportLike)
@@ -58,11 +62,42 @@ function renderAirportInfoDiv(airportObj) {
     airportInfoLikes.textContent = `${airportObj.likes} Likes`
 
     airportInfoDiv.append(airportInfoName, airportInfoLocation, airportInfoLikes)
-    airportsDiv.append(airportInfoDiv)
+    airportsDetailOuterDiv.innerHTML = null
+    airportsDetailOuterDiv.append(airportInfoDiv)
 }
 
+function renderAirportCommentForm(airportObj) {
 
-function renderAmenity (amenityObj) {
+    const id = airportObj
+
+    formDiv.innerHTML = null
+    formDiv.innerHTML = `<form class="comment-form" data-id="${airportObj}">
+        <h4 id="comments-heading">COMMENTS</h4>
+        <input type="text" name="name" class="field-style" placeholder="Full Name"/>
+        <br>
+        <input type="textarea" name="comment" class="field-style" placeholder="Comment" id="comment-field"/>
+        <br>
+        <input type="submit" value="Submit" />
+    </form>`
+}
+
+function renderComment(commentObj) {
+
+    const commentLi = document.createElement("li")
+    const commentAuthor = document.createElement("div")
+    const commentContent = document.createElement("div")
+
+    commentAuthor.className = "author"
+    commentAuthor.textContent = commentObj.author
+    commentAuthor.dataset.id = commentObj.id
+
+    commentContent.className = "content"
+    commentContent.textContent = commentObj.content
+    commentLi.append(commentAuthor, commentContent)
+    commentsUl.append(commentLi)
+}
+
+function renderAmenity(amenityObj) {
     const amenityLi = document.createElement("li")
     const amenityH4 = document.createElement("h4")
     const amenityImgDiv = document.createElement("div")
@@ -70,7 +105,7 @@ function renderAmenity (amenityObj) {
     const amenityImg = document.createElement("img")
     amenityH4.className = "amenity-name"
     amenityH4.textContent = amenityObj.name
-    
+
     amenityImg.className = "amenity-image"
     amenityImg.dataset.id = amenityObj.id
     amenityImg.src = amenityObj.image
@@ -85,7 +120,7 @@ function renderAmenity (amenityObj) {
     amenitiesUl.append(amenityLi)
 }
 
-function renderRestaurant (restaurantObj) {
+function renderRestaurant(restaurantObj) {
     const restaurantLi = document.createElement("li")
     const restaurantH4 = document.createElement("h4")
     const restaurantImgDiv = document.createElement("div")
@@ -132,44 +167,58 @@ function renderStore(storeObj) {
 //**********  Event Listener on Airports (click on image) ****/
 
 airportsUl.addEventListener("click", event => {
-    if(event.target.className === "airport-image"){
+    if (event.target.className === "airport-image") {
         const id = event.target.dataset.id
         console.log(event.target)
         getAirportById(id)
         getAmenities(id)
         getRestaurants(id)
         getStores(id)
-        
+        renderAirportCommentForm(id)
+        getComments(id)
     }
-    if(event.target.className === "airport-likebtn"){
+    if (event.target.className === "airport-likebtn") {
         const id = event.target.dataset.id
-        updateLike(id)
-        const airportLike = event.target.querySelector(".")
-        const numLikes = parseInt(airportLike.textContent) + 1
-        airportLike.textContent = numLikes
-    }
 
+        const airportLi = event.target.closest("li")
+        // console.log(airportLi)
+        const likeButton = airportLi.querySelector("button")
+        const newLikes = parseInt(likeButton.textContent) + 1
+
+        fetch(`http://localhost:3000/airports/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ likes: newLikes })
+        })
+            .then(response => response.json())
+            .then(newLike => {
+                console.log(newLike)
+                likeButton.textContent = `${newLike.likes} 🛫`
+            })
+    }
 })
 
-function getAirportById(id){
+function getAirportById(id) {
     fetch(`http://localhost:3000/airports/${id}`)
-    .then(response => response.json())
-    .then(airportObj => renderAirportInfoDiv(airportObj)) 
-        
+        .then(response => response.json())
+        .then(airportObj => renderAirportInfoDiv(airportObj))
+
 }
 
-function getAmenities(id){
+function getAmenities(id) {
     fetch(`http://localhost:3000/amenities/?_limit=1`)
-    .then(response => response.json())
-    .then(amenitiesArray => {
-        amenitiesUl.innerHTML = ""
-        amenitiesArray.forEach(amenity => {
-            if(amenity.airport_id == id) {
-                renderAmenity(amenity)
-            }
+        .then(response => response.json())
+        .then(amenitiesArray => {
+            amenitiesUl.innerHTML = ""
+            amenitiesArray.forEach(amenity => {
+                if (amenity.airport_id == id) {
+                    renderAmenity(amenity)
+                }
+            })
+
         })
-        
-    })
 }
 
 function getRestaurants(id) {
@@ -178,36 +227,59 @@ function getRestaurants(id) {
         .then(restaurantsArray => {
             restaurantsUl.innerHTML = ""
             restaurantsArray.forEach(restaurantObj => {
-                if(restaurantObj.airport_id == id){
-                renderRestaurant(restaurantObj)
+                if (restaurantObj.airport_id == id) {
+                    renderRestaurant(restaurantObj)
                 }
             })
         })
-    }
+}
 
-    function getStores(id) {
-        fetch('http://localhost:3000/stores/?_limit=1')
-            .then(response => response.json())
-            .then(storesArray => {
-                storesUl.innerHTML = ""
-                storesArray.forEach(storeObj => {
-                    if(storeObj.airport_id == id){
+function getStores(id) {
+    fetch('http://localhost:3000/stores/?_limit=1')
+        .then(response => response.json())
+        .then(storesArray => {
+            storesUl.innerHTML = ""
+            storesArray.forEach(storeObj => {
+                if (storeObj.airport_id == id) {
                     renderStore(storeObj)
-                    }
-                })
+                }
             })
-        }
+        })
+}
+function getComments(id) {
+    fetch('http://localhost:3000/comments')
+        .then(response => response.json())
+        .then(commentsArray => {
+            commentsUl.innerHTML = ""
+            commentsArray.forEach(commentObj => {
+                console.log(commentObj)
+                if (commentObj.airport_id == id) {
+                    renderComment(commentObj)
+                }
+            })
+        })
+}
+//**** EVENT LISTENER FOR AIRPORT COMMENTS */
 
-function updateLikes(id) {
-    fetch(`http://localhost:3000/airports/${id}`, {
-        method: "PATCH",
+formDiv.addEventListener("submit", event => {
+    event.preventDefault()
+    
+    const newName = event.target.name.value
+    const newComment = event.target.comment.value
+    const id = event.target.dataset.id
+
+    fetch(`http://localhost:3000/comments`, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({likes:id})
-      })
-      .then(response => response.json())
-      .then(newLike => {
-       
-      })
-    }
+        body: JSON.stringify({ author: newName, content: newComment, airport_id: id}),
+    })
+        .then(response => response.json())
+        .then(newPost => {
+            renderComment(newPost)
+        })
+
+})
+
+
