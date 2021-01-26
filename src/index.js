@@ -86,6 +86,7 @@ function renderComment(commentObj) {
     const commentLi = document.createElement("li")
     const commentAuthor = document.createElement("div")
     const commentContent = document.createElement("div")
+    const commentDelete = document.createElement("button")
 
     commentAuthor.className = "author"
     commentAuthor.textContent = commentObj.author
@@ -93,7 +94,11 @@ function renderComment(commentObj) {
 
     commentContent.className = "content"
     commentContent.textContent = commentObj.content
-    commentLi.append(commentAuthor, commentContent)
+
+    commentDelete.className = "delete"
+    commentDelete.textContent = "Remove Comment"
+
+    commentLi.append(commentAuthor, commentContent, commentDelete)
     commentsUl.append(commentLi)
 }
 
@@ -282,4 +287,9 @@ formDiv.addEventListener("submit", event => {
 
 })
 
+commentsUl.addEventListener("click", event => {
+    console.log(event.target)
+    if(event.target.matches("delete"))
+
+})
 
