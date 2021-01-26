@@ -19,9 +19,13 @@ header h1 {
     width: 200px;
 } 
 
-#airports-div, #amenities-div, #restaurants-div, #stores-div {
+#airports-div, #amenities-div, #restaurants-div, #stores-div, form {
     margin: 25px;
 }
+
+/* #airport-info-div {
+    text-align: center;
+} */
 
 h2 {
     font-size: 60px;
@@ -55,8 +59,8 @@ ul {
   .circular--landscape {
     display: inline-block;
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     overflow: hidden;
     border-radius: 50%;
   }
@@ -70,8 +74,8 @@ ul {
   .circular--square {
     display: inline-block;
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     overflow: hidden; 
     border-radius: 50%;
     margin: 20px;
@@ -88,3 +92,21 @@ ul {
     flex-wrap: wrap;
     justify-content: right;
   }
+
+#comment-field {
+    width: 50%;
+}
+
+input {
+    padding: 10px;
+    margin-top: 5px;
+
+}
+
+#comments-heading {
+    font-size: 35px;
+}
+
+input[type=submit], input[type="text"], input[type="textarea"]{
+    font-family: 'Karla', sans-serif;
+}

@@ -1,13 +1,15 @@
 // STABLE ELEMENTS
 
 const airportsUl = document.querySelector('#airports-ul')
+// const airportsInfoOuterDiv = document.querySelector('#airports-info-outer-div')
+const airportsDiv = document.querySelector('#airports-div')
 const amenitiesUl = document.querySelector('#amenities-ul')
 const restaurantsUl = document.querySelector('#restaurants-ul')
 const storesUl = document.querySelector('#stores-ul')
 
 // FUNCTIONS
 
-
+getAirports() 
 //***** Getting all airports ***/
 function getAirports () {
     fetch('http://localhost:3000/airports')
@@ -18,6 +20,8 @@ function getAirports () {
             })
         });
 }
+
+//****** Render Airport Div, Amenities, Restaurants, Stores *****/
 
 function renderAirport(airportObj) {
 
@@ -41,19 +45,22 @@ function renderAirport(airportObj) {
     airportImgDiv.append(airportImg)
     airportLi.append(nameH4, airportImgDiv, airportLike)
     airportsUl.append(airportLi)
-    
 }
 
-//***** Getting amenities ***/
-// function getAmenities () {
-//     fetch('http://localhost:3000/amenities')
-//         .then(response => response.json())
-//         .then(amenitiesArray => {
-//             amenitiesArray.forEach(amenityObj => {
-//                 renderAmenity(amenityObj)
-//             })
-//         });
-// }
+function renderAirportInfoDiv(airportObj) {
+    const airportInfoDiv = document.createElement('div')
+    const airportInfoName = document.createElement('h3')
+    const airportInfoLocation = document.createElement('p')
+    const airportInfoLikes = document.createElement('p')
+    airportInfoDiv.id = "airport-info-div"
+    airportInfoName.textContent = `${airportObj.name}`
+    airportInfoLocation.textContent = `${airportObj.city}, ${airportObj.country}`
+    airportInfoLikes.textContent = `${airportObj.likes} Likes`
+
+    airportInfoDiv.append(airportInfoName, airportInfoLocation, airportInfoLikes)
+    airportsDiv.append(airportInfoDiv)
+}
+
 
 function renderAmenity (amenityObj) {
     const amenityLi = document.createElement("li")
@@ -68,21 +75,14 @@ function renderAmenity (amenityObj) {
     amenityImg.dataset.id = amenityObj.id
     amenityImg.src = amenityObj.image
 
+    const amenityLike = document.createElement("button")
+    amenityLike.className = "amenity-likebtn"
+    amenityLike.textContent = `${amenityObj.likes} 🛫`
+    amenityLike.dataset.id = amenityObj.id
+
     amenityImgDiv.append(amenityImg)
-    amenityLi.append(amenityH4, amenityImgDiv)
+    amenityLi.append(amenityH4, amenityImgDiv, amenityLike)
     amenitiesUl.append(amenityLi)
-}
-
-//***** Getting restaurants ***/
-
-function getRestaurants () {
-    fetch('http://localhost:3000/restaurants')
-        .then(response => response.json())
-        .then(restaurantsArray => {
-            restaurantsArray.forEach(restaurantObj => {
-                renderRestaurant(restaurantObj)
-            })
-        });
 }
 
 function renderRestaurant (restaurantObj) {
@@ -97,17 +97,36 @@ function renderRestaurant (restaurantObj) {
     restaurantImg.dataset.id = restaurantObj.id
     restaurantImg.src = restaurantObj.image
 
+    const restaurantLike = document.createElement("button")
+    restaurantLike.className = "restaurant-likebtn"
+    restaurantLike.textContent = `${restaurantObj.likes} 🛫`
+    restaurantLike.dataset.id = restaurantObj.id
+
     restaurantImgDiv.append(restaurantImg)
-    restaurantLi.append(restaurantH4, restaurantImgDiv)
+    restaurantLi.append(restaurantH4, restaurantImgDiv, restaurantLike)
     restaurantsUl.append(restaurantLi)
 }
+function renderStore(storeObj) {
+    const storeLi = document.createElement("li")
+    const storeH4 = document.createElement("h4")
+    const storeImgDiv = document.createElement("div")
+    storeImgDiv.className = "circular--square"
+    const storeImg = document.createElement("img")
+    storeH4.className = "store-name"
+    storeH4.textContent = storeObj.name
+    storeImg.className = "store-image"
+    storeImg.dataset.id = storeObj.id
+    storeImg.src = storeObj.image
 
+    const storeLike = document.createElement("button")
+    storeLike.className = "store-likebtn"
+    storeLike.textContent = `${storeObj.likes} 🛫`
+    storeLike.dataset.id = storeObj.id
 
-
-getAirports() 
-getAmenities()
-getRestaurants()
-// getStores()
+    storeImgDiv.append(storeImg)
+    storeLi.append(storeH4, storeImgDiv, storeLike)
+    storesUl.append(storeLi)
+}
 
 
 //**********  Event Listener on Airports (click on image) ****/
@@ -117,27 +136,34 @@ airportsUl.addEventListener("click", event => {
         const id = event.target.dataset.id
         console.log(event.target)
         getAirportById(id)
-
         getAmenities(id)
-        // getRestaurants(id)
-        // getStores(id)
+        getRestaurants(id)
+        getStores(id)
         
     }
     if(event.target.className === "airport-likebtn"){
         const id = event.target.dataset.id
-        updateLikes(id)
+        updateLike(id)
+        const airportLike = event.target.querySelector(".")
+        const numLikes = parseInt(airportLike.textContent) + 1
+        airportLike.textContent = numLikes
     }
 
 })
 
+function getAirportById(id){
+    fetch(`http://localhost:3000/airports/${id}`)
+    .then(response => response.json())
+    .then(airportObj => renderAirportInfoDiv(airportObj)) 
+        
+}
+
 function getAmenities(id){
-    fetch(`http://localhost:3000/amenities`)
+    fetch(`http://localhost:3000/amenities/?_limit=1`)
     .then(response => response.json())
     .then(amenitiesArray => {
         amenitiesUl.innerHTML = ""
         amenitiesArray.forEach(amenity => {
-            // console.log(amenity.airport_id == id)
-            // amenitiesUl.innerHTML = ""
             if(amenity.airport_id == id) {
                 renderAmenity(amenity)
             }
@@ -145,6 +171,32 @@ function getAmenities(id){
         
     })
 }
+
+function getRestaurants(id) {
+    fetch('http://localhost:3000/restaurants/?_limit=1')
+        .then(response => response.json())
+        .then(restaurantsArray => {
+            restaurantsUl.innerHTML = ""
+            restaurantsArray.forEach(restaurantObj => {
+                if(restaurantObj.airport_id == id){
+                renderRestaurant(restaurantObj)
+                }
+            })
+        })
+    }
+
+    function getStores(id) {
+        fetch('http://localhost:3000/stores/?_limit=1')
+            .then(response => response.json())
+            .then(storesArray => {
+                storesUl.innerHTML = ""
+                storesArray.forEach(storeObj => {
+                    if(storeObj.airport_id == id){
+                    renderStore(storeObj)
+                    }
+                })
+            })
+        }
 
 function updateLikes(id) {
     fetch(`http://localhost:3000/airports/${id}`, {
@@ -155,23 +207,7 @@ function updateLikes(id) {
         body: JSON.stringify({likes:id})
       })
       .then(response => response.json())
-      .then(newLike => console.log())
+      .then(newLike => {
+       
+      })
     }
-
-
-
-function getAirportById(id){
-    fetch(`http://localhost:3000/airports/${id}`)
-    .then(response => response.json())
-    .then(airportObj => {
-        // once we click the airport 
-        
-    })
-}
-
-// function renderAirportInfo(airportObj) {
-
-    // airport.dataset.id = airportObj.id
-    
-// }
-
