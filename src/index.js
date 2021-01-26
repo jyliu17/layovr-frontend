@@ -22,6 +22,8 @@ function getAirports () {
 function renderAirport(airportObj) {
 
     const airportLi = document.createElement("li")
+    const airportImgDiv = document.createElement('div')
+    airportImgDiv.className = "circular--landscape"
     const nameH4 = document.createElement("h4")
     nameH4.className = "airport-name"
     nameH4.textContent = airportObj.name
@@ -36,7 +38,8 @@ function renderAirport(airportObj) {
     airportLike.textContent = `${airportObj.likes} 🛫`
     airportLike.dataset.id = airportObj.id
 
-    airportLi.append(nameH4, airportImg, airportLike)
+    airportImgDiv.append(airportImg)
+    airportLi.append(nameH4, airportImgDiv, airportLike)
     airportsUl.append(airportLi)
     
 }
@@ -55,6 +58,8 @@ function renderAirport(airportObj) {
 function renderAmenity (amenityObj) {
     const amenityLi = document.createElement("li")
     const amenityH4 = document.createElement("h4")
+    const amenityImgDiv = document.createElement("div")
+    amenityImgDiv.className = "circular--square"
     const amenityImg = document.createElement("img")
     amenityH4.className = "amenity-name"
     amenityH4.textContent = amenityObj.name
@@ -63,8 +68,8 @@ function renderAmenity (amenityObj) {
     amenityImg.dataset.id = amenityObj.id
     amenityImg.src = amenityObj.image
 
-    
-    amenityLi.append(amenityH4, amenityImg)
+    amenityImgDiv.append(amenityImg)
+    amenityLi.append(amenityH4, amenityImgDiv)
     amenitiesUl.append(amenityLi)
 }
 
@@ -83,6 +88,8 @@ function getRestaurants () {
 function renderRestaurant (restaurantObj) {
     const restaurantLi = document.createElement("li")
     const restaurantH4 = document.createElement("h4")
+    const restaurantImgDiv = document.createElement("div")
+    restaurantImgDiv.className = "circular--square"
     const restaurantImg = document.createElement("img")
     restaurantH4.className = "restaurant-name"
     restaurantH4.textContent = restaurantObj.name
@@ -90,7 +97,8 @@ function renderRestaurant (restaurantObj) {
     restaurantImg.dataset.id = restaurantObj.id
     restaurantImg.src = restaurantObj.image
 
-    restaurantLi.append(restaurantH4, restaurantImg)
+    restaurantImgDiv.append(restaurantImg)
+    restaurantLi.append(restaurantH4, restaurantImgDiv)
     restaurantsUl.append(restaurantLi)
 }
 

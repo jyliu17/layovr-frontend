@@ -1,12 +1,90 @@
+body {
+    font-family: 'Karla', sans-serif;
+    margin: 0px;
+  }
+
+header {
+    overflow: auto;
+}
+
+header h1 {
+    font-size: 150px;
+    margin: 10px;
+    float: left;
+}
+
+#layovr-logo {
+    display: inline-block;
+    float: left;
+    width: 200px;
+} 
+
+#airports-div, #amenities-div, #restaurants-div, #stores-div {
+    margin: 25px;
+}
+
+h2 {
+    font-size: 60px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+h3 {
+    font-size: 50px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+h4 {
+    background:rgba(0,0,0,0);
+}
+
 ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
   }
 
-  img {
+  /* img {
     border-radius: 50%;
     display: block;
     padding: 5px;
     width: 150px;
+  } */
+
+  .circular--landscape {
+    display: inline-block;
+    position: relative;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  
+  .circular--landscape img {
+    width: auto;
+    height: 100%;
+    margin-left: -50px;
+  }
+
+  .circular--square {
+    display: inline-block;
+    position: relative;
+    width: 150px;
+    height: 150px;
+    overflow: hidden; 
+    border-radius: 50%;
+    margin: 20px;
+  }
+
+  .circular--square img {
+    width: auto;
+    height: 100%;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: right;
   }
