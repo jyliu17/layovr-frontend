@@ -97,6 +97,7 @@ function renderComment(commentObj) {
 
     commentDelete.className = "delete"
     commentDelete.textContent = "Remove Comment"
+    commentDelete.dataset.id = commentObj.id
 
     commentLi.append(commentAuthor, commentContent, commentDelete)
     commentsUl.append(commentLi)
@@ -174,7 +175,6 @@ function renderStore(storeObj) {
 airportsUl.addEventListener("click", event => {
     if (event.target.className === "airport-image") {
         const id = event.target.dataset.id
-        console.log(event.target)
         getAirportById(id)
         getAmenities(id)
         getRestaurants(id)
@@ -186,7 +186,7 @@ airportsUl.addEventListener("click", event => {
         const id = event.target.dataset.id
 
         const airportLi = event.target.closest("li")
-        // console.log(airportLi)
+        
         const likeButton = airportLi.querySelector("button")
         const newLikes = parseInt(likeButton.textContent) + 1
 
@@ -199,7 +199,7 @@ airportsUl.addEventListener("click", event => {
         })
             .then(response => response.json())
             .then(newLike => {
-                console.log(newLike)
+             
                 likeButton.textContent = `${newLike.likes} 🛫`
             })
     }
@@ -257,7 +257,6 @@ function getComments(id) {
         .then(commentsArray => {
             commentsUl.innerHTML = ""
             commentsArray.forEach(commentObj => {
-                console.log(commentObj)
                 if (commentObj.airport_id == id) {
                     renderComment(commentObj)
                 }
@@ -288,8 +287,19 @@ formDiv.addEventListener("submit", event => {
 })
 
 commentsUl.addEventListener("click", event => {
-    console.log(event.target)
-    if(event.target.matches("delete"))
+    
+    if(event.target.matches("button")){
+        const id = event.target.dataset.id
+        const commentLi = event.target.closest("li")
+        commentLi.remove()
+        deleteComment(id)
+        
+    }
 
 })
 
+function deleteComment(id) {
+    fetch(`http://localhost:3000/comments/${id}`, {
+    method: 'DELETE',
+  })
+}
