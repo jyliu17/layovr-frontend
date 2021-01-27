@@ -14,9 +14,10 @@ const commentsUl = document.querySelector("#comments-ul")
 getAirports()
 //***** Getting all airports ***/
 function getAirports() {
-    fetch('http://localhost:3000/airports/?_limit=2')
+    fetch('http://localhost:3000/airports/')
         .then(response => response.json())
         .then(airportArray => {
+            airportArray.sort((a,b)=> (a.code > b.code ? 1 : -1))
             airportArray.forEach(airportObj => {
                 renderAirport(airportObj)
             })
@@ -218,15 +219,15 @@ function getAirportById(id) {
 
 function getAmenities(amenId) {
     fetch(`http://localhost:3000/amenities`)
-                        .then(response => response.json())
-                        .then(amenitiesArray => {
-                            amenitiesArray.forEach(amenity => {
-                                if (amenity.id == amenId) {
-                                    renderAmenity(amenity)
-                                }
-                            })
-                        })
-                    }
+        .then(response => response.json())
+        .then(amenitiesArray => {
+            amenitiesArray.forEach(amenity => {
+            if (amenity.id == amenId) {
+            renderAmenity(amenity)
+            }
+        })
+    })
+}
 
 function getAmenitiesThroughAA(id) {
     amenitiesUl.innerHTML = ""
@@ -239,9 +240,7 @@ function getAmenitiesThroughAA(id) {
                     getAmenities(amenId)
                 }
             })
-        }
-            )
-        
+        })     
 }
 
 
@@ -252,7 +251,7 @@ function getRestaurants(id) {
             restaurantsUl.innerHTML = ""
             restaurantsArray.forEach(restaurantObj => {
                 if (restaurantObj.airport_id == id) {
-                    renderRestaurant(restaurantObj)
+                renderRestaurant(restaurantObj)
                 }
             })
         })
@@ -312,9 +311,7 @@ commentsUl.addEventListener("click", event => {
         const commentLi = event.target.closest("li")
         commentLi.remove()
         deleteComment(id)
-
     }
-
 })
 
 function deleteComment(id) {
