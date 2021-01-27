@@ -14,7 +14,7 @@ const commentsUl = document.querySelector("#comments-ul")
 getAirports()
 //***** Getting all airports ***/
 function getAirports() {
-    fetch('http://localhost:3000/airports')
+    fetch('http://localhost:3000/airports/?_limit=2')
         .then(response => response.json())
         .then(airportArray => {
             airportArray.forEach(airportObj => {
@@ -43,7 +43,7 @@ function renderAirport(airportObj) {
     airportLike.className = "airport-likebtn"
     airportLike.textContent = `${airportObj.likes} 🛫`
     airportLike.dataset.id = airportObj.id
- 
+
 
     airportImgDiv.append(airportImg)
     airportLi.append(nameH4, airportImgDiv, airportLike)
@@ -86,10 +86,15 @@ function renderComment(commentObj) {
     const commentAuthor = document.createElement("div")
     const commentContent = document.createElement("div")
     const commentDelete = document.createElement("button")
+    const commentTimestamp = document.createElement('div')
 
     commentAuthor.className = "author"
     commentAuthor.textContent = commentObj.author
     commentAuthor.dataset.id = commentObj.id
+
+    commentTimestamp.className = "timestamp"
+    const timestamp = commentObj.created_at.slice(0, 10)
+    commentTimestamp.textContent = timestamp
 
     commentContent.className = "content"
     commentContent.textContent = commentObj.content
@@ -98,7 +103,7 @@ function renderComment(commentObj) {
     commentDelete.textContent = "Remove Comment"
     commentDelete.dataset.id = commentObj.id
 
-    commentLi.append(commentAuthor, commentContent, commentDelete)
+    commentLi.append(commentAuthor, commentTimestamp, commentContent, commentDelete)
     commentsUl.append(commentLi)
 }
 
@@ -175,7 +180,7 @@ airportsUl.addEventListener("click", event => {
     if (event.target.className === "airport-image") {
         const id = event.target.dataset.id
         getAirportById(id)
-        getAmenities(id)
+        getAmenitiesThroughAA(id)
         getRestaurants(id)
         getStores(id)
         renderAirportCommentForm(id)
@@ -185,7 +190,7 @@ airportsUl.addEventListener("click", event => {
         const id = event.target.dataset.id
 
         const airportLi = event.target.closest("li")
-        
+
         const likeButton = airportLi.querySelector("button")
         const newLikes = parseInt(likeButton.textContent) + 1
 
@@ -198,7 +203,7 @@ airportsUl.addEventListener("click", event => {
         })
             .then(response => response.json())
             .then(newLike => {
-             
+
                 likeButton.textContent = `${newLike.likes} 🛫`
             })
     }
@@ -211,19 +216,34 @@ function getAirportById(id) {
 
 }
 
-function getAmenities(id) {
-    fetch(`http://localhost:3000/amenities/?_limit=1`)
+function getAmenities(amenId) {
+    fetch(`http://localhost:3000/amenities`)
+                        .then(response => response.json())
+                        .then(amenitiesArray => {
+                            amenitiesArray.forEach(amenity => {
+                                if (amenity.id == amenId) {
+                                    renderAmenity(amenity)
+                                }
+                            })
+                        })
+                    }
+
+function getAmenitiesThroughAA(id) {
+    amenitiesUl.innerHTML = ""
+    fetch(`http://localhost:3000/airport_amenities`)
         .then(response => response.json())
-        .then(amenitiesArray => {
-            amenitiesUl.innerHTML = ""
-            amenitiesArray.forEach(amenity => {
-                if (amenity.airport_id == id) {
-                    renderAmenity(amenity)
+        .then(airportAmenitiesArray => {
+            airportAmenitiesArray.forEach(aaObj => {
+                if (aaObj.airport_id == id) {
+                    const amenId = aaObj.amenity_id
+                    getAmenities(amenId)
                 }
             })
-
-        })
+        }
+            )
+        
 }
+
 
 function getRestaurants(id) {
     fetch('http://localhost:3000/restaurants/?_limit=1')
@@ -266,7 +286,7 @@ function getComments(id) {
 
 formDiv.addEventListener("submit", event => {
     event.preventDefault()
-    
+
     const newName = event.target.name.value
     const newComment = event.target.comment.value
     const id = event.target.dataset.id
@@ -276,7 +296,7 @@ formDiv.addEventListener("submit", event => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ author: newName, content: newComment, airport_id: id}),
+        body: JSON.stringify({ author: newName, content: newComment, airport_id: id }),
     })
         .then(response => response.json())
         .then(newPost => {
@@ -286,19 +306,19 @@ formDiv.addEventListener("submit", event => {
 })
 
 commentsUl.addEventListener("click", event => {
-    
-    if(event.target.matches("button")){
+
+    if (event.target.matches("button")) {
         const id = event.target.dataset.id
         const commentLi = event.target.closest("li")
         commentLi.remove()
         deleteComment(id)
-        
+
     }
 
 })
 
 function deleteComment(id) {
     fetch(`http://localhost:3000/comments/${id}`, {
-    method: 'DELETE',
-  })
+        method: 'DELETE',
+    })
 }

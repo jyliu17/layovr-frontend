@@ -63,8 +63,8 @@ ul {
   .circular--landscape {
     display: inline-block;
     position: relative;
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     overflow: hidden;
     border-radius: 50%;
   }
@@ -78,8 +78,8 @@ ul {
   .circular--square {
     display: inline-block;
     position: relative;
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     overflow: hidden; 
     border-radius: 50%;
     margin: 20px;
@@ -133,12 +133,20 @@ input {
 #comments-ul li .author {
   padding: 5px;
   margin: 5px;
-  font: #62959c;
+  color: #62959c;
+  font-weight: bold;
 }
 
 #comments-ul li .content {
   padding: 3px;
   margin: 5px;
+  font-size: 30px;
+}
+
+#comments-ul li .timestamp {
+  padding: 3px;
+  margin: 5px;
+  font-size: 10px;
 }
 
 input[type=submit], input[type="text"], input[type="textarea"]{
