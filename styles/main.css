@@ -7,6 +7,10 @@ header {
     overflow: auto;
 }
 
+button {
+  font-family: 'Karla', sans-serif;
+}
+
 header h1 {
     font-size: 150px;
     margin: 10px;
@@ -19,7 +23,7 @@ header h1 {
     width: 200px;
 } 
 
-#airports-div, #amenities-div, #restaurants-div, #stores-div, form {
+#airports-div, #amenities-div, #restaurants-div, #stores-div, form, #comments-ul {
     margin: 25px;
 }
 
@@ -81,6 +85,14 @@ ul {
     margin: 20px;
   }
 
+  .circular--landscape:hover {
+    box-shadow: 0 0 12px rgba(33,33,33,.6); 
+  }
+
+  .circular--square:hover {
+    box-shadow: 0 0 12px rgba(33,33,33,.6); 
+  }
+
   .circular--square img {
     width: auto;
     height: 100%;
@@ -105,6 +117,28 @@ input {
 
 #comments-heading {
     font-size: 35px;
+}
+
+#comments-ul li {
+  background-color: #e3d0b9;
+  margin: 8px;
+  width: 60%;
+}
+
+#comments-ul li button {
+  padding: 3px;
+  margin: 5px;
+}
+
+#comments-ul li .author {
+  padding: 5px;
+  margin: 5px;
+  font: #62959c;
+}
+
+#comments-ul li .content {
+  padding: 3px;
+  margin: 5px;
 }
 
 input[type=submit], input[type="text"], input[type="textarea"]{
