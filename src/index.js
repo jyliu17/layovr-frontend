@@ -40,11 +40,10 @@ function renderAirport(airportObj) {
     airportImg.alt = airportObj.code
 
     const airportLike = document.createElement("button")
-    // const likeSpan = document.createElement('span')
     airportLike.className = "airport-likebtn"
     airportLike.textContent = `${airportObj.likes} 🛫`
     airportLike.dataset.id = airportObj.id
-    // airportLike.append(likeSpan)
+ 
 
     airportImgDiv.append(airportImg)
     airportLi.append(nameH4, airportImgDiv, airportLike)
