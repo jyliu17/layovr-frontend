@@ -46,8 +46,8 @@ function renderAirport(airportObj) {
     airportLike.dataset.id = airportObj.id
 
 
-    airportImgDiv.append(airportImg)
-    airportLi.append(nameH4, airportImgDiv, airportLike)
+    airportImgDiv.append(airportImg, nameH4)
+    airportLi.append(airportImgDiv, airportLike)
     airportsUl.append(airportLi)
 }
 
@@ -59,6 +59,7 @@ function renderAirportInfoDiv(airportObj) {
     airportInfoDiv.id = "airport-info-div"
     airportInfoName.textContent = `${airportObj.name}`
     airportInfoLocation.textContent = `${airportObj.city}, ${airportObj.country}`
+    airportInfoLikes.className = "airport-info-likes"
     airportInfoLikes.textContent = `${airportObj.likes} Likes`
 
     airportInfoDiv.append(airportInfoName, airportInfoLocation, airportInfoLikes)
@@ -189,11 +190,15 @@ airportsUl.addEventListener("click", event => {
     }
     if (event.target.className === "airport-likebtn") {
         const id = event.target.dataset.id
-
         const airportLi = event.target.closest("li")
-
+        const wholeAirportDiv = airportLi.parentElement.parentElement
+   
         const likeButton = airportLi.querySelector("button")
         const newLikes = parseInt(likeButton.textContent) + 1
+
+        // const numLikes = wholeAirportDiv.getElementsByClassName("airport-info-likes")
+        // debugger
+        // const newInfoLikes = parseInt(numLikes.textContent) + 1
 
         fetch(`http://localhost:3000/airports/${id}`, {
             method: "PATCH",
@@ -206,6 +211,7 @@ airportsUl.addEventListener("click", event => {
             .then(newLike => {
 
                 likeButton.textContent = `${newLike.likes} 🛫`
+                // newInfoLikes.textContent = `${newLike.likes} Likes`
             })
     }
 })
