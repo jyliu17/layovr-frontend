@@ -8,7 +8,7 @@
 // const commentsUl = document.querySelector("#comments-ul")
 const modal = document.querySelector(".modal")
 const span = document.getElementsByClassName("close")[0]
-
+const modalContent = document.querySelector(".modal-content")
 //******  Event Handler for amenitiesUl */
 
 
@@ -35,11 +35,13 @@ amenitiesUl.addEventListener("click", event => {
         likeButton.textContent = `${newLike.likes} 🛫`
         })
     } 
-    if(event.target.matches(".amenity-image")){
-        modal.style.display = 'block'
-    }
+    // if(event.target.matches(".amenity-image")){
+    //     const id = event.target.dataset.id
+    //     modal.style.display = 'block'
+        //fetch amenity by id
+        //then display amentiy contents/attributes on modal
+    // }
 })
-
 
 span.onclick = () => {
     modal.style.display = "none";
@@ -50,8 +52,6 @@ window.onclick = (event) => {
         modal.style.display = "none";
     }
 }
-
-
 
 restaurantsUl.addEventListener("click", event => {
 
@@ -77,9 +77,44 @@ restaurantsUl.addEventListener("click", event => {
         })
     }
     if(event.target.matches(".restaurant-image")){
+        const id = event.target.dataset.id
         modal.style.display = 'block'
+        getRestaurantById(id)
+        
     }
 })
+
+function getRestaurantById(id) {
+    fetch(`http://localhost:3000/restaurants/${id}`)
+        .then(response => response.json())
+        .then(restaurantObj => {
+            modalContent.innerHTML = ""
+            showRestaurantOnModal(restaurantObj)     
+        })
+}
+
+function showRestaurantOnModal(restaurantObj) {
+    const restaurantDetailDiv = document.createElement("div")
+    const restaurantDetailH4 = document.createElement("h4")
+    const restaurantDetailImgDiv = document.createElement("div")
+    restaurantDetailImgDiv.className = "circular--square"
+    const restaurantDetailImg = document.createElement("img")
+    restaurantDetailH4.className = "restaurant-detail-name"
+    restaurantDetailH4.textContent = restaurantObj.name
+    restaurantDetailImg.className = "restaurant-image"
+    restaurantDetailImg.dataset.id = restaurantObj.id
+    restaurantDetailImg.src = restaurantObj.image
+    const restaurantDetailCost = document.createElement("p")
+    restaurantDetailCost.textContent = `${restaurantObj.cost}`
+    const restaurantDetailCuisine = document.createElement("p")
+    restaurantDetailCuisine.textContent = `Cuisine: ${restaurantObj.cuisine}`
+
+    restaurantDetailImgDiv.append(restaurantDetailImg)
+    restaurantDetailDiv.append(restaurantDetailH4, restaurantDetailImgDiv, restaurantDetailCost, restaurantDetailCuisine)
+    modalContent.append(restaurantDetailDiv)
+}
+
+
 
 storesUl.addEventListener("click", event => {
 
@@ -105,9 +140,41 @@ storesUl.addEventListener("click", event => {
         })
     }
     if(event.target.matches(".store-image")){
+        const id = event.target.dataset.id
         modal.style.display = 'block'
+        getStoreById(id)
     }
 })
 
+function getStoreById(id) {
+    fetch(`http://localhost:3000/stores/${id}`)
+        .then(response => response.json())
+        .then(storeObj => {
+            modalContent.innerHTML = ""
+            showStoreOnModal(storeObj)     
+        })
+}
+
+function showStoreOnModal(storeObj) {
+    const storeDetailDiv = document.createElement("div")
+    const storeDetailH4 = document.createElement("h4")
+    const storeDetailImgDiv = document.createElement("div")
+    storeDetailImgDiv.className = "circular--square"
+    const storeDetailImg = document.createElement("img")
+    storeDetailH4.className = "store-detail-name"
+    storeDetailH4.textContent = storeObj.name
+    storeDetailImg.className = "store-image"
+    storeDetailImg.dataset.id = storeObj.id
+    storeDetailImg.src = storeObj.image
+    const storeDetailCost = document.createElement("p")
+    storeDetailCost.textContent = `${storeObj.cost}`
+    const storeDetailCategory = document.createElement("p")
+    storeDetailCategory.textContent = `Category: ${storeObj.category}`
+
+
+    storeDetailImgDiv.append(storeDetailImg)
+    storeDetailDiv.append(storeDetailH4, storeDetailImgDiv, storeDetailCost)
+    modalContent.append(storeDetailDiv)
+}
 
     

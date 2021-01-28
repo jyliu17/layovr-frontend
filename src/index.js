@@ -243,7 +243,6 @@ function getAmenitiesThroughAA(id) {
         })     
 }
 
-
 function getRestaurants(id) {
     fetch('http://localhost:3000/restaurants/?_limit=1')
         .then(response => response.json())

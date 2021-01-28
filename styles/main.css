@@ -28,6 +28,15 @@ header h1 {
 }
 
 #airport-info-div {
+  background-color: #d4e2d4;
+  padding: 8px;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: 60%;
+}
+
+#airport-info-div {
     text-align: center;
 }
 
@@ -120,26 +129,27 @@ input {
 }
 
 #comments-ul li {
-  background-color: #e3d0b9;
+  background-color: #ecb390;
   margin: 8px;
   width: 60%;
+  border-radius: 15px;
 }
 
 #comments-ul li button {
-  padding: 3px;
-  margin: 5px;
+  padding: 5px;
+  margin: 8px;
 }
 
 #comments-ul li .author {
-  padding: 5px;
-  margin: 5px;
-  color: #62959c;
+  padding: 8px;
+  margin: 8px;
+  color: #df7861;
   font-weight: bold;
 }
 
 #comments-ul li .content {
-  padding: 3px;
-  margin: 5px;
+  padding: 5px;
+  margin: 8px;
   font-size: 30px;
 }
 
