@@ -76,6 +76,9 @@ restaurantsUl.addEventListener("click", event => {
         likeButton.textContent = `${newLike.likes} 🛫`
         })
     }
+    if(event.target.matches(".restaurant-image")){
+        modal.style.display = 'block'
+    }
 })
 
 storesUl.addEventListener("click", event => {
@@ -100,6 +103,9 @@ storesUl.addEventListener("click", event => {
          
         likeButton.textContent = `${newLike.likes} 🛫`
         })
+    }
+    if(event.target.matches(".store-image")){
+        modal.style.display = 'block'
     }
 })
 
