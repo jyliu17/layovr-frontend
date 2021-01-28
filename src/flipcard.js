@@ -3,12 +3,14 @@
 // const airportsDiv = document.querySelector('#airports-div')
 // const amenitiesUl = document.querySelector('#amenities-ul')
 // const restaurantsUl = document.querySelector('#restaurants-ul')
-// const storesUl = document.querySelector('#stores-ul')
+// const storesUl = document.querySelector('#stores-ul') 
 // const formDiv = document.querySelector("#form-div")
 // const commentsUl = document.querySelector("#comments-ul")
-
+const modal = document.querySelector(".modal")
+const span = document.getElementsByClassName("close")[0]
 
 //******  Event Handler for amenitiesUl */
+
 
 amenitiesUl.addEventListener("click", event => {
 
@@ -34,9 +36,21 @@ amenitiesUl.addEventListener("click", event => {
         })
     } 
     if(event.target.matches(".amenity-image")){
-        console.log(event.target)
+        modal.style.display = 'block'
     }
 })
+
+
+span.onclick = () => {
+    modal.style.display = "none";
+}
+
+window.onclick = (event) => {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
 
 
 restaurantsUl.addEventListener("click", event => {
