@@ -177,7 +177,7 @@ function showStoreOnModal(storeObj) {
 
 
     storeDetailImgDiv.append(storeDetailImg)
-    storeDetailDiv.append(storeDetailH4, storeDetailImgDiv, storeDetailCost)
+    storeDetailDiv.append(storeDetailH4, storeDetailImgDiv, storeDetailCost, storeDetailCategory)
     modalContent.append(storeDetailDiv)
 }
 
