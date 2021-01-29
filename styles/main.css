@@ -215,11 +215,33 @@ input[type=submit], input[type="text"], input[type="textarea"]{
   background-color: beige;
   margin: 20% auto;
   padding: 20px;
-  width: 70%;
-  height: 50%;
+  width: 40%;
+  height: 40%;
   box-shadow: 0 5px 8px 0 rgba(0,0,0,0.7), 0 7px 20px 0 rgba(0,0,0,0.7);
   animation-name: modalfadein;
   animation-duration: 0.6s;
+}
+
+.store-detail-name {
+  font-size: 35px;
+  text-shadow: 2px 2px #d4e2d4;
+  margin-bottom: 10px;
+}
+
+.restaurant-detail-name {
+  font-size: 35px;
+  text-shadow: 2px 2px #d4e2d4;
+  margin-bottom: 10px;
+}
+
+.restaurant-detail-cost, .store-detail-cost {
+  font-size: 25px;
+  margin: 8px;
+}
+
+.store-detail-category, .restaurant-detail-cuisine {
+  font-size: 18px;
+  margin: 8px;
 }
 
 .close {

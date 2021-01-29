@@ -106,8 +106,10 @@ function showRestaurantOnModal(restaurantObj) {
     restaurantDetailImg.src = restaurantObj.image
     const restaurantDetailCost = document.createElement("p")
     restaurantDetailCost.textContent = `${restaurantObj.cost}`
+    restaurantDetailCost.className = "restaurant-detail-cost"
     const restaurantDetailCuisine = document.createElement("p")
     restaurantDetailCuisine.textContent = `Cuisine: ${restaurantObj.cuisine}`
+    restaurantDetailCuisine.className = "restaurant-detail-cuisine"
 
     restaurantDetailImgDiv.append(restaurantDetailImg)
     restaurantDetailDiv.append(restaurantDetailH4, restaurantDetailImgDiv, restaurantDetailCost, restaurantDetailCuisine)
@@ -168,8 +170,10 @@ function showStoreOnModal(storeObj) {
     storeDetailImg.src = storeObj.image
     const storeDetailCost = document.createElement("p")
     storeDetailCost.textContent = `${storeObj.cost}`
+    storeDetailCost.className = "store-detail-cost"
     const storeDetailCategory = document.createElement("p")
     storeDetailCategory.textContent = `Category: ${storeObj.category}`
+    storeDetailCategory.className = "store-detail-category"
 
 
     storeDetailImgDiv.append(storeDetailImg)
